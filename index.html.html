@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Churppi — Himalayan Kitchen, Chandannagar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,560;0,9..144,680;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --espresso:#241A14;
+    --espresso-2:#31241B;
+    --parchment:#F4E9D8;
+    --parchment-2:#EADFC9;
+    --ember:#E2701F;
+    --ember-2:#F08C3A;
+    --teal:#1C3A44;
+    --chili:#B23A2E;
+    --cream:#FBF5EA;
+    --line: rgba(244,233,216,0.18);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--espresso);
+    color:var(--parchment);
+    font-family:'Work Sans', sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', serif;
+    font-weight:560;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  /* ---------- texture ---------- */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:5; opacity:0.05; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- nav ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 6vw;
+    background:linear-gradient(to bottom, rgba(36,26,20,0.92), rgba(36,26,20,0));
+    transition:padding 0.3s ease;
+  }
+  .brandmark{
+    display:flex; align-items:baseline; gap:10px;
+    font-family:'Fraunces', serif; font-size:22px; font-weight:680;
+    color:var(--cream);
+  }
+  .brandmark span{
+    font-size:13px; font-weight:400; font-style:italic; color:var(--ember-2); letter-spacing:0.02em;
+  }
+  .navlinks{display:flex; gap:34px; font-size:14px;}
+  .navlinks a{
+    text-decoration:none; color:var(--parchment); position:relative; padding-bottom:4px;
+  }
+  .navlinks a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--ember-2);
+    transition:width 0.3s ease;
+  }
+  .navlinks a:hover::after{width:100%;}
+  @media(max-width:720px){ .navlinks{display:none;} }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative; min-height:100svh; display:flex; align-items:center;
+    padding:0 6vw;
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(226,112,31,0.20), transparent 55%),
+      radial-gradient(ellipse at 90% 110%, rgba(28,58,68,0.5), transparent 55%),
+      linear-gradient(180deg, #1c130e, #241A14 55%, #241A14);
+    overflow:hidden;
+  }
+  .hero-steam{
+    position:absolute; width:340px; height:340px; border-radius:50%;
+    background:radial-gradient(circle, rgba(226,112,31,0.25), transparent 70%);
+    top:-80px; right:-60px; filter:blur(10px);
+    animation: float 9s ease-in-out infinite;
+  }
+  @keyframes float{ 0%,100%{transform:translateY(0px);} 50%{transform:translateY(24px);} }
+
+  .hero-inner{ max-width:900px; z-index:2; padding-top:90px; }
+  .kicker{
+    display:flex; align-items:center; gap:10px;
+    font-size:14px; color:var(--ember-2); margin-bottom:22px;
+    opacity:0; transform:translateY(10px); animation: reveal 0.8s ease forwards 0.15s;
+  }
+  .kicker .dot{width:6px;height:6px;border-radius:50%;background:var(--ember-2);}
+  .hero h1{
+    font-size:clamp(52px, 9vw, 118px); line-height:0.95; color:var(--cream);
+    opacity:0; transform:translateY(24px); animation: reveal 1s cubic-bezier(.2,.7,.2,1) forwards 0.3s;
+  }
+  .hero h1 em{ font-style:italic; color:var(--ember-2); }
+  .hero .bn{
+    font-size:clamp(20px,3vw,30px); color:var(--parchment-2); margin-top:6px; display:block;
+    opacity:0; animation: reveal 1s ease forwards 0.55s;
+  }
+  .hero p.lede{
+    max-width:540px; margin-top:28px; font-size:18px; line-height:1.6; color:var(--parchment-2);
+    opacity:0; transform:translateY(16px); animation: reveal 0.9s ease forwards 0.75s;
+  }
+  @keyframes reveal{ to{opacity:1; transform:translateY(0);} }
+
+  .hero-row{
+    display:flex; flex-wrap:wrap; align-items:center; gap:26px; margin-top:38px;
+    opacity:0; transform:translateY(16px); animation: reveal 0.9s ease forwards 0.95s;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:15px 26px; border-radius:3px; text-decoration:none;
+    font-size:14.5px; font-weight:600; letter-spacing:0.01em;
+    border:1px solid transparent; cursor:pointer;
+    transition:transform 0.25s ease, background 0.25s ease, border-color .25s ease;
+  }
+  .btn-solid{ background:var(--ember); color:var(--cream); }
+  .btn-solid:hover{ background:var(--ember-2); transform:translateY(-2px); }
+  .btn-line{ border-color:var(--line); color:var(--parchment); }
+  .btn-line:hover{ border-color:var(--ember-2); color:var(--ember-2); transform:translateY(-2px); }
+
+  .rating-chip{
+    display:flex; align-items:center; gap:12px; font-size:14px; color:var(--parchment-2);
+  }
+  .stars{ color:var(--ember-2); letter-spacing:2px; font-size:15px;}
+  .rating-num{ font-family:'Fraunces',serif; font-size:20px; color:var(--cream); }
+
+  /* ---------- marquee strip ---------- */
+  .strip{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    background:var(--espresso-2);
+    overflow:hidden; white-space:nowrap; padding:16px 0;
+  }
+  .strip-track{
+    display:inline-block; padding-left:100%;
+    animation: scroll 26s linear infinite;
+    font-family:'Fraunces', serif; font-style:italic; font-size:17px; color:var(--parchment-2);
+  }
+  .strip-track span{ margin:0 34px; color:var(--ember-2); font-style:normal; }
+  @keyframes scroll{ 100%{ transform:translateX(-100%);} }
+
+  /* ---------- section shell ---------- */
+  section{ padding:120px 6vw; position:relative; }
+  .eyebrow-row{
+    display:flex; align-items:center; gap:16px; margin-bottom:18px;
+  }
+  .index-mark{
+    font-family:'Fraunces',serif; font-style:italic; color:var(--ember-2); font-size:15px;
+  }
+  .rule{ height:1px; flex:1; background:var(--line); }
+  .sec-title{ font-size:clamp(32px,4.4vw,52px); color:var(--cream); max-width:680px; }
+  .sec-sub{ max-width:520px; color:var(--parchment-2); margin-top:18px; font-size:16px; line-height:1.7; }
+
+  .reveal-up{ opacity:0; transform:translateY(28px); transition:opacity 0.8s ease, transform 0.8s cubic-bezier(.2,.7,.2,1); }
+  .reveal-up.in{ opacity:1; transform:translateY(0); }
+
+  /* ---------- about grid ---------- */
+  .about-grid{
+    display:grid; grid-template-columns: 1.1fr 0.9fr; gap:60px; margin-top:64px; align-items:start;
+  }
+  @media(max-width:860px){ .about-grid{grid-template-columns:1fr;} }
+
+  .about-copy p{ font-size:16.5px; line-height:1.85; color:var(--parchment-2); max-width:52ch; }
+  .about-copy p + p{ margin-top:16px; }
+
+  .fact-list{ margin-top:36px; display:flex; flex-direction:column; gap:0; }
+  .fact{
+    display:flex; justify-content:space-between; gap:20px; padding:16px 0;
+    border-bottom:1px solid var(--line); font-size:14.5px;
+  }
+  .fact .k{ color:var(--parchment-2); }
+  .fact .v{ color:var(--cream); text-align:right; font-weight:500; }
+
+  .tagboard{ display:flex; flex-wrap:wrap; gap:10px; margin-top:28px; }
+  .tag{
+    border:1px solid var(--line); color:var(--parchment-2); padding:8px 14px; border-radius:2px;
+    font-size:13px; transition:border-color .25s ease, color .25s ease;
+  }
+  .tag:hover{ border-color:var(--ember-2); color:var(--ember-2); }
+
+  /* the tilted card motif, referencing the physical orange menu card */
+  .card-stack{ position:relative; height:460px; }
+  .tilt-card{
+    position:absolute; width:78%; border-radius:6px; padding:30px;
+    box-shadow:0 30px 60px rgba(0,0,0,0.45);
+  }
+  .tilt-card.back{
+    background:var(--teal); top:10px; left:6%; transform:rotate(-7deg);
+    height:390px;
+  }
+  .tilt-card.front{
+    background:linear-gradient(155deg, var(--ember), #c85e17 88%);
+    top:60px; left:20%; transform:rotate(4deg);
+    height:390px; display:flex; flex-direction:column; justify-content:space-between;
+    transition:transform 0.4s ease;
+  }
+  .card-stack:hover .tilt-card.front{ transform:rotate(1deg) translateY(-6px); }
+  .tilt-card.front .cap{ font-family:'Fraunces',serif; font-size:26px; color:var(--cream); }
+  .tilt-card.front .items{ font-size:13.5px; color:rgba(251,245,234,0.92); line-height:2; }
+  .tilt-card.front .price{ font-family:'Fraunces',serif; font-style:italic; font-size:15px; color:var(--cream); }
+  .row-line{ display:flex; justify-content:space-between; border-bottom:1px dashed rgba(251,245,234,0.35); padding-bottom:6px; }
+
+  /* ---------- menu section ---------- */
+  .menu-shell{ margin-top:56px; display:grid; grid-template-columns:240px 1fr; gap:0; border:1px solid var(--line); }
+  @media(max-width:800px){ .menu-shell{grid-template-columns:1fr;} }
+  .menu-tabs{ border-right:1px solid var(--line); }
+  @media(max-width:800px){ .menu-tabs{ border-right:none; border-bottom:1px solid var(--line); display:flex; overflow-x:auto;} }
+  .menu-tab{
+    display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer;
+    color:var(--parchment-2); font-family:'Work Sans',sans-serif; font-size:14.5px;
+    padding:20px 26px; border-bottom:1px solid var(--line); position:relative;
+    white-space:nowrap;
+  }
+  .menu-tab .num{ color:var(--ember-2); font-family:'Fraunces',serif; font-style:italic; margin-right:10px; font-size:13px;}
+  .menu-tab.active{ color:var(--cream); background:rgba(226,112,31,0.08); }
+  .menu-tab.active::before{
+    content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--ember);
+  }
+  .menu-tab:hover{ color:var(--cream); }
+
+  .menu-panel{ padding:46px; display:none; }
+  .menu-panel.active{ display:block; animation: panelIn 0.5s cubic-bezier(.2,.7,.2,1); }
+  @keyframes panelIn{ from{opacity:0; transform:translateX(10px);} to{opacity:1; transform:translateX(0);} }
+
+  .panel-head{ display:flex; justify-content:space-between; align-items:flex-end; gap:20px; margin-bottom:8px; flex-wrap:wrap;}
+  .panel-head h3{ font-size:28px; color:var(--cream); }
+  .panel-note{ font-size:13px; color:var(--ember-2); font-style:italic; font-family:'Fraunces',serif; }
+
+  .dish{
+    display:flex; justify-content:space-between; gap:24px; padding:22px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .dish:last-child{ border-bottom:none; }
+  .dish-name{ font-size:17px; color:var(--cream); font-weight:500; }
+  .dish-desc{ font-size:13.5px; color:var(--parchment-2); margin-top:5px; max-width:46ch; line-height:1.6; }
+  .dish-price{ font-family:'Fraunces',serif; font-style:italic; font-size:16px; color:var(--ember-2); white-space:nowrap; }
+
+  .menu-fineprint{
+    margin-top:28px; padding-top:18px; border-top:1px dashed var(--line);
+    font-size:12.5px; color:rgba(244,233,216,0.55); line-height:1.7;
+  }
+
+  /* ---------- gallery / mood ---------- */
+  .mood-grid{
+    display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-top:56px;
+  }
+  @media(max-width:900px){ .mood-grid{grid-template-columns:repeat(2,1fr);} }
+  .mood-tile{
+    aspect-ratio:1/1.1; border-radius:4px; position:relative; overflow:hidden;
+    display:flex; align-items:flex-end; padding:18px;
+    font-family:'Fraunces',serif; font-style:italic; color:var(--cream); font-size:15px;
+  }
+  .mood-tile span{ position:relative; z-index:2; }
+  .mood-tile::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.55)); }
+  .mood-tile:nth-child(1){ background:radial-gradient(circle at 30% 20%, #7a3a1c, #2c1a10);}
+  .mood-tile:nth-child(2){ background:radial-gradient(circle at 60% 30%, #1f4a52, #16262b);}
+  .mood-tile:nth-child(3){ background:radial-gradient(circle at 40% 40%, #a8461f, #33190d);}
+  .mood-tile:nth-child(4){ background:radial-gradient(circle at 50% 20%, #274d43, #142320);}
+
+  /* ---------- reviews ---------- */
+  .review-rail{
+    margin-top:56px; display:flex; gap:24px; overflow-x:auto; padding-bottom:20px;
+    scroll-snap-type:x mandatory;
+  }
+  .review-rail::-webkit-scrollbar{ height:6px; }
+  .review-rail::-webkit-scrollbar-thumb{ background:var(--line); border-radius:4px; }
+  .review-card{
+    scroll-snap-align:start; min-width:340px; max-width:340px;
+    background:var(--espresso-2); border:1px solid var(--line); border-radius:6px; padding:32px;
+    transition:transform .3s ease, border-color .3s ease;
+  }
+  .review-card:hover{ transform:translateY(-6px); border-color:rgba(226,112,31,0.4); }
+  .review-stars{ color:var(--ember-2); font-size:14px; letter-spacing:2px; margin-bottom:18px; }
+  .review-quote{ font-family:'Fraunces',serif; font-size:19px; line-height:1.5; color:var(--cream); font-style:italic; }
+  .review-meta{ margin-top:24px; padding-top:18px; border-top:1px solid var(--line); font-size:13px; color:var(--parchment-2); display:flex; justify-content:space-between;}
+
+  /* ---------- visit ---------- */
+  .visit-grid{ display:grid; grid-template-columns:1fr 1fr; gap:60px; margin-top:56px; }
+  @media(max-width:860px){ .visit-grid{grid-template-columns:1fr;} }
+  .map-plate{
+    border-radius:6px; border:1px solid var(--line); position:relative; overflow:hidden;
+    min-height:360px; background:
+      linear-gradient(160deg, #1c2f33, #10191b),
+      repeating-linear-gradient(0deg, rgba(244,233,216,0.04) 0 1px, transparent 1px 42px),
+      repeating-linear-gradient(90deg, rgba(244,233,216,0.04) 0 1px, transparent 1px 42px);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pin{
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+  }
+  .pin-dot{
+    width:18px; height:18px; border-radius:50% 50% 50% 0; background:var(--ember);
+    transform:rotate(45deg); box-shadow:0 0 0 6px rgba(226,112,31,0.18);
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{ box-shadow:0 0 0 6px rgba(226,112,31,0.18);} 50%{ box-shadow:0 0 0 14px rgba(226,112,31,0.06);} }
+  .pin-label{ font-family:'Fraunces',serif; font-style:italic; color:var(--parchment-2); font-size:14px; text-align:center; max-width:220px;}
+
+  .visit-info h3{ font-size:24px; color:var(--cream); margin-bottom:6px; }
+  .visit-block{ margin-bottom:30px; }
+  .visit-block .lbl{ font-size:12.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--ember-2); margin-bottom:8px; }
+  .visit-block .val{ font-size:16px; color:var(--parchment-2); line-height:1.6; }
+  .hours-row{ display:flex; justify-content:space-between; font-size:14.5px; padding:9px 0; border-bottom:1px solid var(--line); color:var(--parchment-2);}
+  .hours-row .status{ color:var(--ember-2); font-weight:600; }
+
+  footer{
+    padding:50px 6vw; border-top:1px solid var(--line); display:flex; justify-content:space-between;
+    align-items:center; flex-wrap:wrap; gap:16px; font-size:13px; color:rgba(244,233,216,0.55);
+  }
+
+  .scroll-top{
+    position:fixed; right:26px; bottom:26px; width:48px; height:48px; border-radius:50%;
+    background:var(--ember); color:var(--cream); display:flex; align-items:center; justify-content:center;
+    text-decoration:none; font-size:18px; opacity:0; pointer-events:none; transition:opacity .3s ease, transform .3s ease;
+    z-index:40; box-shadow:0 10px 24px rgba(0,0,0,0.4);
+  }
+  .scroll-top.show{ opacity:1; pointer-events:auto; }
+  .scroll-top:hover{ transform:translateY(-4px); }
+
+/* =========================
+   CHURPPI VISUAL ENHANCEMENT
+   ========================= */
+.hero{
+  min-height:100svh;
+}
+.hero-photo{
+  position:absolute;
+  inset:0 0 0 42%;
+  z-index:1;
+  overflow:hidden;
+  opacity:.72;
+}
+.hero-photo::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,var(--espresso) 0%,rgba(36,26,20,.92) 18%,rgba(36,26,20,.38) 58%,rgba(36,26,20,.12) 100%),
+    linear-gradient(0deg,rgba(36,26,20,.55),transparent 55%);
+  z-index:2;
+}
+.hero-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:saturate(.82) contrast(1.05);
+  transform:scale(1.04);
+  animation:heroZoom 14s ease-in-out infinite alternate;
+}
+@keyframes heroZoom{
+  from{transform:scale(1.04)}
+  to{transform:scale(1.11)}
+}
+.hero-inner{position:relative;}
+.hero-scroll{
+  position:absolute;
+  left:6vw;
+  bottom:28px;
+  z-index:3;
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(244,233,216,.55);
+  writing-mode:vertical-rl;
+}
+.hero-scroll::after{
+  content:"";
+  display:block;
+  width:1px;height:44px;
+  margin:12px auto 0;
+  background:var(--ember-2);
+}
+
+.about-photo{
+  margin-top:24px;
+  border:1px solid var(--line);
+  overflow:hidden;
+  border-radius:5px;
+  aspect-ratio:16/9;
+}
+.about-photo img{
+  width:100%;height:100%;object-fit:cover;
+  filter:saturate(.82);
+  transition:transform .7s ease;
+}
+.about-photo:hover img{transform:scale(1.05)}
+
+.menu-feature{
+  margin:0 0 42px;
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:18px;
+}
+.menu-feature-card{
+  position:relative;
+  min-height:270px;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:5px;
+}
+.menu-feature-card img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .7s ease;
+}
+.menu-feature-card:hover img{transform:scale(1.06)}
+.menu-feature-card .overlay{
+  position:absolute;inset:auto 0 0;
+  padding:26px;
+  background:linear-gradient(transparent,rgba(0,0,0,.82));
+}
+.menu-feature-card h3{
+  color:var(--cream);
+  font-size:27px;
+}
+.menu-feature-card p{
+  color:var(--parchment-2);
+  font-size:13px;
+  margin-top:6px;
+}
+.dish-image{
+  width:86px;height:70px;
+  flex:0 0 86px;
+  border-radius:4px;
+  overflow:hidden;
+  border:1px solid var(--line);
+}
+.dish-image img{
+  width:100%;height:100%;object-fit:cover;
+  transition:transform .4s ease;
+}
+.dish:hover .dish-image img{transform:scale(1.08)}
+.dish-main{
+  display:flex;gap:16px;min-width:0;
+}
+.dish-main > div:last-child{min-width:0}
+
+.mood-tile img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;
+  transition:transform .6s ease,filter .6s ease;
+  filter:saturate(.72) brightness(.72);
+}
+.mood-tile:hover img{transform:scale(1.08);filter:saturate(.9) brightness(.84)}
+.mood-tile::after{z-index:1}
+.mood-tile span{z-index:2}
+
+.review-card .review-icon{
+  width:42px;height:42px;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(226,112,31,.13);
+  color:var(--ember-2);
+  font-family:'Fraunces',serif;
+  font-size:19px;
+  margin-bottom:18px;
+}
+
+.visit-photo{
+  margin-top:18px;
+  border-radius:5px;
+  overflow:hidden;
+  height:170px;
+  border:1px solid var(--line);
+}
+.visit-photo img{width:100%;height:100%;object-fit:cover}
+
+@media(max-width:800px){
+  .hero-photo{inset:0;opacity:.48}
+  .hero-photo::before{
+    background:linear-gradient(90deg,rgba(36,26,20,.92),rgba(36,26,20,.35)),
+               linear-gradient(0deg,rgba(36,26,20,.7),transparent);
+  }
+  .hero-scroll{display:none}
+  .menu-feature{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+  .dish-main{gap:10px}
+  .dish-image{width:70px;height:60px;flex-basis:70px}
+}
+
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<nav>
+  <div class="brandmark">Churppi <span>চারপি</span></div>
+  <div class="navlinks">
+    <a href="#about">About</a>
+    <a href="#menu">Menu</a>
+    <a href="#mood">Gallery</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#visit">Visit</a>
+  </div>
+  <a href="#visit" class="btn btn-line" style="padding:10px 18px; font-size:13px;">Directions</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-steam"></div>
+
+    <div class="hero-photo" aria-hidden="true">
+      <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1800&q=85" alt="">
+    </div>
+    <div class="hero-scroll">scroll to explore</div>
+
+  <div class="hero-inner">
+    <div class="kicker"><span class="dot"></span> Chandannagar, West Bengal · Nepali &amp; Tibetan Kitchen</div>
+    <h1>Warm bowls, <em>slow</em><br>mountain mornings.</h1>
+    <span class="bn">চারপি — a little house of momos &amp; thukpa</span>
+    <p class="lede">Steamed baskets, wok-fired noodles and Himalayan brews served in a cosy first-floor dining room above Lakshmiganj Bazar — the kind of place people come back to for the people as much as the food.</p>
+    <div class="hero-row">
+      <a href="#menu" class="btn btn-solid">View the menu</a>
+      <a href="#visit" class="btn btn-line">Find us</a>
+      <div class="rating-chip">
+        <span class="rating-num">4.4</span>
+        <span class="stars">★★★★☆</span>
+        <span>46 reviews</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="strip">
+  <div class="strip-track">
+    Steamed Momo <span>·</span> Ema Datshi <span>·</span> Chicken Thukpa <span>·</span> Chilli Paneer <span>·</span> Himalayan Green Tea <span>·</span>
+    Steamed Momo <span>·</span> Ema Datshi <span>·</span> Chicken Thukpa <span>·</span> Chilli Paneer <span>·</span> Himalayan Green Tea <span>·</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="eyebrow-row">
+    <span class="index-mark">the house</span>
+    <div class="rule"></div>
+  </div>
+  <h2 class="sec-title reveal-up">A first-floor kitchen built around the momo basket</h2>
+
+  <div class="about-grid">
+    <div class="about-copy reveal-up">
+      <p>Churppi sits one floor up in Lakshmiganj Bazar, just off GT Road — easy to miss from the street, easy to love once you're seated. The room leans into its Himalayan roots without overdoing it: warm wood, low light, and the quiet clatter of steamer baskets from the kitchen.</p>
+      <p>The kitchen keeps its list tight — momos in every style, a short run of Bhutanese-style datshi, thukpa, wok specials and pork dishes — so everything that comes out is made to order, not reheated. Diners keep coming back for the same two things: how gentle the staff are, and how far ₹200–400 stretches here.</p>
+
+
+      <div class="about-photo">
+        <img src="https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?auto=format&fit=crop&w=1200&q=85" alt="Warm restaurant table with food">
+      </div>
+
+      <div class="fact-list">
+        <div class="fact"><span class="k">Cuisine</span><span class="v">Nepali · Tibetan · Himalayan</span></div>
+        <div class="fact"><span class="k">Price for two</span><span class="v">₹200 – ₹400 per person</span></div>
+        <div class="fact"><span class="k">Service</span><span class="v">Dine-in · Takeaway · Delivery</span></div>
+        <div class="fact"><span class="k">Rating</span><span class="v">4.4 out of 5 · 46 Google reviews</span></div>
+      </div>
+
+      <div class="tagboard">
+        <span class="tag">Good for groups</span>
+        <span class="tag">Casual dine-in</span>
+        <span class="tag">Good for kids</span>
+        <span class="tag">Free street parking</span>
+        <span class="tag">Quick bite &amp; small plates</span>
+      </div>
+    </div>
+
+    <div class="card-stack reveal-up">
+      <div class="tilt-card back"></div>
+      <div class="tilt-card front">
+        <div>
+          <div class="cap">Signature Momo</div>
+        </div>
+        <div class="items">
+          <div class="row-line"><span>Steamed Momo</span></div>
+          <div class="row-line"><span>Pan-fried Momo</span></div>
+          <div class="row-line"><span>Chilli Momo</span></div>
+          <div class="row-line"><span>Cocktail Momo</span></div>
+        </div>
+        <div class="price">the table's usual order →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="eyebrow-row">
+    <span class="index-mark">the menu</span>
+    <div class="rule"></div>
+  </div>
+  <h2 class="sec-title reveal-up">What's on the table</h2>
+  <p class="sec-sub reveal-up">Read straight off Churppi's own printed menu. A few item names on the physical card were too worn to make out under photo — those are marked below rather than guessed at.</p>
+
+
+  <div class="menu-feature reveal-up">
+    <div class="menu-feature-card">
+      <img src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=1200&q=85" alt="Steamed dumplings">
+      <div class="overlay">
+        <h3>The momo moment</h3>
+        <p>Steamed, pan-fried, fried and chilli-tossed — made for sharing.</p>
+      </div>
+    </div>
+    <div class="menu-feature-card">
+      <img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85" alt="Warm bowl of noodles">
+      <div class="overlay">
+        <h3>Warm bowls</h3>
+        <p>Thukpa, noodles and wok-fired comfort for slow evenings.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="menu-shell reveal-up">
+    <div class="menu-tabs" id="menuTabs">
+      <button class="menu-tab active" data-panel="momo"><span class="num">01</span>Signature Momo</button>
+      <button class="menu-tab" data-panel="datshi"><span class="num">02</span>Datshi Specialties</button>
+      <button class="menu-tab" data-panel="rice"><span class="num">03</span>Rice &amp; Noodles</button>
+      <button class="menu-tab" data-panel="wok"><span class="num">04</span>Wok Specials</button>
+      <button class="menu-tab" data-panel="thukpa"><span class="num">05</span>Thukpa Trail</button>
+      <button class="menu-tab" data-panel="brews"><span class="num">06</span>Himalayan Brews</button>
+      <button class="menu-tab" data-panel="sweets"><span class="num">07</span>Nepali Sweet Delights</button>
+    </div>
+
+    <div class="menu-panels">
+      <div class="menu-panel active" id="panel-momo">
+        <div class="panel-head"><h3>Signature Momo</h3><span class="panel-note">steamed, fried, or pan-seared</span></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=240&q=80" alt="Steamed Momo"></div><div><div class="dish-name">Steamed Momo</div><div class="dish-desc">The house classic — a soft-steamed basket, served with the table's chilli chutney.</div></div></div></div><div class="dish-price">veg / non-veg</div></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=240&q=80" alt="Fried Momo"></div><div><div class="dish-name">Fried Momo</div><div class="dish-desc">Golden and crisp-edged, finished with a light dusting of spice.</div></div></div></div></div></div><div class="dish-price">veg / non-veg</div></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=240&q=80" alt="Pan-fried Momo"></div><div><div class="dish-name">Pan-fried Momo</div><div class="dish-desc">Steamed then seared on one side for a crackling base.</div></div></div></div><div class="dish-price">veg / non-veg</div></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=240&q=80" alt="Chilli Momo"></div><div><div class="dish-name">Chilli Momo</div><div class="dish-desc">Tossed through a hot wok sauce with peppers and onion.</div></div></div></div><div class="dish-price">veg / non-veg</div></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=240&q=80" alt="Cocktail Momo"></div><div><div class="dish-name">Cocktail Momo</div><div class="dish-desc">Bite-sized momo, a favourite for sharing across the table.</div></div></div></div></div></div><div class="dish-price">veg / non-veg</div></div>
+      </div>
+
+      <div class="menu-panel" id="panel-datshi">
+        <div class="panel-head"><h3>Datshi Specialties</h3><span class="panel-note">Bhutanese-style, cheese-forward</span></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=240&q=80" alt="Ema Datshi with Vegetables"></div><div><div class="dish-name">Ema Datshi with Vegetables</div><div class="dish-desc">The Himalayan comfort classic — chillies simmered into a cheese sauce, folded through vegetables.</div></div></div></div><div class="dish-price">veg</div></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1505253758473-96b7015fcd40?auto=format&fit=crop&w=240&q=80" alt="Ema Datshi with Mushroom"></div><div><div class="dish-name">Ema Datshi with Mushroom</div><div class="dish-desc">Same cheese-and-chilli base, built around mushroom instead.</div></div></div></div><div class="dish-price">veg</div></div>
+      </div>
+
+      <div class="menu-panel" id="panel-rice">
+        <div class="panel-head"><h3>Rice &amp; Noodles</h3><span class="panel-note">wok-tossed, made to order</span></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=240&q=80" alt="House Noodles"></div><div><div class="dish-name">House Noodles</div><div class="dish-desc">Stir-fried noodles with vegetables, available veg, egg or chicken.</div></div></div></div></div></div><div class="dish-price">3 ways</div></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=240&q=80" alt="Chowmein Fried Rice"></div><div><div class="dish-name">Chowmein Fried Rice</div><div class="dish-desc">Wok-fried rice tossed with vegetables, available veg, egg or chicken.</div></div></div></div><div class="dish-price">3 ways</div></div>
+      </div>
+
+      <div class="menu-panel" id="panel-wok">
+        <div class="panel-head"><h3>Wok Specials</h3><span class="panel-note">chilli-forward, fast-fired</span></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=240&q=80" alt="Chilli Paneer"></div><div><div class="dish-name">Chilli Paneer</div><div class="dish-desc">Cubes of paneer tossed with onion, peppers and a sharp chilli sauce.</div></div><div class="dish-price">veg</div></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=240&q=80" alt="Chilli Chicken"></div><div><div class="dish-name">Chilli Chicken</div><div class="dish-desc">The same treatment, built around chicken instead.</div></div></div></div><div class="dish-price">non-veg</div></div>
+      </div>
+
+      <div class="menu-panel" id="panel-thukpa">
+        <div class="panel-head"><h3>Thukpa Trail</h3><span class="panel-note">Tibetan noodle soup, built to warm you up</span></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=240&q=80" alt="Veg Thukpa"></div><div><div class="dish-name">Veg Thukpa</div><div class="dish-desc">A brothy noodle soup loaded with vegetables — the table's rainy-day order.</div></div><div class="dish-price">veg</div></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=240&q=80" alt="Chicken Thukpa"></div><div><div class="dish-name">Chicken Thukpa</div><div class="dish-desc">Same broth and hand-pulled noodles, simmered with chicken.</div></div><div class="dish-price">non-veg</div></div>
+      </div>
+
+      <div class="menu-panel" id="panel-brews">
+        <div class="panel-head"><h3>Himalayan Brews</h3><span class="panel-note">teas to close out the meal</span></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=240&q=80" alt="Himalayan Red Tea"></div><div><div class="dish-name">Himalayan Red Tea</div><div class="dish-desc">A brisk, malty black tea.</div></div></div></div><div class="dish-price">hot</div></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=240&q=80" alt="Himalayan Green Tea"></div><div><div class="dish-name">Himalayan Green Tea</div><div class="dish-desc">Light and grassy, served plain.</div></div></div></div><div class="dish-price">hot</div></div>
+        <div class="dish"><div class="dish-main"><div class="dish-image"><img src="https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=240&q=80" alt="Himalayan Ginger / Masala Tea"></div><div><div class="dish-name">Himalayan Ginger / Masala Tea</div><div class="dish-desc">Spiced and warming, brewed strong.</div></div></div></div><div class="dish-price">hot</div></div>
+      </div>
+
+      <div class="menu-panel" id="panel-sweets">
+        <div class="panel-head"><h3>Nepali Sweet Delights</h3><span class="panel-note">to finish</span></div>
+        <div class="dish"><div><div class="dish-name">Chef's sweet selection</div><div class="dish-desc">The printed names on this section were too faded in our photo to transcribe accurately — ask your server what's on today.</div></div><div class="dish-price">ask staff</div></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="menu-fineprint">Menu read from Churppi's in-house printed card. A handful of exact item names and prices were too small or glare-affected to confirm from photo, so a few lines above are described rather than quoted verbatim — happy to correct anything once you send a clearer shot of that panel.</p>
+</section>
+
+<!-- MOOD / GALLERY -->
+<section id="mood">
+  <div class="eyebrow-row">
+    <span class="index-mark">the room</span>
+    <div class="rule"></div>
+  </div>
+  <h2 class="sec-title reveal-up">Cozy, warm, unhurried</h2>
+  <div class="mood-grid reveal-up">
+    <div class="mood-tile"><img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=900&q=85" alt="the steamer baskets"><span>the steamer baskets</span></div>
+    <div class="mood-tile"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=85" alt="low wood-lit tables"><span>low wood-lit tables</span></div>
+    <div class="mood-tile"><img src="https://images.unsplash.com/photo-1601050690117-94f5f6fa8bd7?auto=format&fit=crop&w=900&q=85" alt="chilli oil, always on the table"><span>chilli oil, always on the table</span></div>
+    <div class="mood-tile"><img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=900&q=85" alt="tea to close the meal"><span>tea to close the meal</span></div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="eyebrow-row">
+    <span class="index-mark">what people say</span>
+    <div class="rule"></div>
+  </div>
+  <h2 class="sec-title reveal-up">46 reviews, 4.4 stars</h2>
+  <p class="sec-sub reveal-up">Diners keep pointing to three things: the authentic Nepali &amp; Tibetan cooking, the gentle service, and how quickly plates come out.</p>
+
+  <div class="review-rail reveal-up">
+    <div class="review-card">
+      <div class="review-icon">“</div><div class="review-stars">★★★★★</div>
+      <div class="review-quote">All dishes are tasteful. Overall great experience.</div>
+      <div class="review-meta"><span>Moumita Majumder Sett</span><span>Local Guide</span></div>
+    </div>
+    <div class="review-card">
+      <div class="review-icon">“</div><div class="review-stars">★★★★★</div>
+      <div class="review-quote">Spent a cozy evening at this newly opened Tibetan-themed restaurant — authentic Tibetan food, done well.</div>
+      <div class="review-meta"><span>Aishwarya Chakraborty</span><span>2 reviews</span></div>
+    </div>
+    <div class="review-card">
+      <div class="review-icon">“</div><div class="review-stars">★★★★★</div>
+      <div class="review-quote">Very good food, great atmosphere. Love it.</div>
+      <div class="review-meta"><span>Tanima Poddar</span><span>2 reviews</span></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★☆</div>
+      <div class="review-quote">The food tasted amazing and the customer service was excellent.</div>
+      <div class="review-meta"><span>Google review</span><span>via Maps</span></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★☆</div>
+      <div class="review-quote">Sweet people, delish food.</div>
+      <div class="review-meta"><span>Recent visitor</span><span>8 days ago</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- VISIT -->
+<section id="visit">
+  <div class="eyebrow-row">
+    <span class="index-mark">find us</span>
+    <div class="rule"></div>
+  </div>
+  <h2 class="sec-title reveal-up">Come warm up</h2>
+
+  <div class="visit-grid">
+    <div class="map-plate reveal-up">
+      <div class="pin">
+        <div class="pin-dot"></div>
+        <div class="pin-label">First floor, Lakshmiganj Bazar<br>GT Road, Sarishapara<br>Chandannagar, West Bengal 712136</div>
+      </div>
+    </div>
+
+    <div class="visit-info reveal-up">
+      <div class="visit-block">
+        <div class="lbl">Address</div>
+        <div class="val">First floor, Lakshmiganj Bazar, GT Rd, Sarishapara, Chandannagar, West Bengal 712136<br>Plus code: V98C+VX Chandannagar</div>
+      </div>
+      <div class="visit-block">
+        <div class="lbl">Phone</div>
+        <div class="val">086172 89609</div>
+      </div>
+      <div class="visit-block">
+        <div class="lbl">Hours today</div>
+        <div class="hours-row"><span>Opens</span><span class="status">12:30 pm</span></div>
+        <div class="hours-row"><span>Currently</span><span>Closed until opening</span></div>
+      </div>
+
+      <div class="visit-photo">
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1000&q=85" alt="Cozy restaurant interior">
+      </div>
+
+      <a href="https://www.google.com/maps/search/?api=1&query=Churppi%20Lakshmiganj%20Bazar%20Chandannagar" target="_blank" rel="noopener" class="btn btn-solid" style="margin-top:10px;">Get directions ↗</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>Churppi · চারপি — Lakshmiganj Bazar, Chandannagar</div>
+  <div>Churppi · Himalayan comfort, served warm.</div>
+</footer>
+
+<a href="#" class="scroll-top" id="scrollTop">↑</a>
+
+<script>
+  // tab switching
+  const tabs = document.querySelectorAll('.menu-tab');
+  const panels = document.querySelectorAll('.menu-panel');
+  tabs.forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      tabs.forEach(t=>t.classList.remove('active'));
+      panels.forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-'+tab.dataset.panel).classList.add('active');
+    });
+  });
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal-up');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+
+  // scroll-to-top button
+  const stBtn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', ()=>{
+    if(window.scrollY > 600){ stBtn.classList.add('show'); } else { stBtn.classList.remove('show'); }
+  });
+  stBtn.addEventListener('click', (e)=>{ e.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); });
+</script>
+
+</body>
+</html>
